@@ -56,7 +56,7 @@
     font-weight:600; cursor:pointer; font-family:inherit; }
   .btn-primary { background:var(--green); color:#fff; }
   .btn-secondary { background:rgba(255,255,255,0.1); color:var(--text); }
-.toast { position:fixed; top:60px; left:50%; transform:translateX(-50%); background:var(--green);
+  .toast { position:fixed; top:60px; left:50%; transform:translateX(-50%); background:var(--green);
     color:#fff; padding:10px 24px; border-radius:8px; font-size:14px; font-weight:600;
     opacity:0; transition:opacity 0.3s; z-index:200; pointer-events:none; }
   .toast.show { opacity:1; }
@@ -82,10 +82,25 @@
     border:1px solid rgba(255,255,255,0.15); background:transparent; color:var(--dim); font-size:12px;
     cursor:pointer; display:none; align-items:center; justify-content:center; }
   .exercise-card.added .remove-btn { display:flex; }
+  .swap-bar { display:flex; align-items:center; justify-content:space-between; padding:8px 16px;
+    background:rgba(255,255,255,0.05); border-bottom:1px solid #333; }
+  .swap-btn { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); border-radius:8px;
+    color:var(--text); padding:6px 12px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+  .swap-btn:active { background:rgba(255,255,255,0.2); }
+  .swap-info { font-size:12px; color:var(--green); font-weight:600; flex:1; margin-left:10px; }
+  .swap-undo { background:transparent; border:1px solid var(--red); border-radius:8px;
+    color:var(--red); padding:4px 10px; font-size:11px; font-weight:600; font-family:inherit; cursor:pointer; margin-left:8px; }
+  .modal select { width:100%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);
+    border-radius:8px; color:var(--text); padding:10px; font-size:16px; font-family:inherit; -webkit-appearance:none; }
+  .swap-arrow { text-align:center; font-size:20px; color:var(--dim); padding:4px 0; }
 </style>
 </head>
 <body>
 <div class="tabs" id="tabs"></div>
+<div class="swap-bar" id="swapBar">
+  <button class="swap-btn" onclick="openSwapModal()">&#8644; Swap Days</button>
+  <span class="swap-info" id="swapInfo"></span>
+</div>
 <div id="panels"></div>
 <div class="toast" id="toast">Copied to clipboard!</div>
 
@@ -116,6 +131,26 @@
     <div class="modal-btns">
       <button class="btn btn-secondary" onclick="closeAddModal()">Cancel</button>
       <button class="btn btn-primary" onclick="confirmAdd()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Swap Days Modal -->
+<div class="modal-overlay" id="swapModal">
+  <div class="modal">
+    <h3>Swap Exercise Plans</h3>
+    <div class="input-group">
+      <label>Swap this day...</label>
+      <select id="swapDay1"></select>
+    </div>
+    <div class="swap-arrow">&#8597;</div>
+    <div class="input-group">
+      <label>...with this day</label>
+      <select id="swapDay2"></select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="closeSwapModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmSwap()">Swap</button>
     </div>
   </div>
 </div>
@@ -184,8 +219,13 @@ var DAYS = [
 // ============================================================
 var STORE_KEY = 'gym_' + DAYS[0].isoDate;
 
+// Keep original exercises for swap/undo
+var ORIG_EXERCISES = {};
+DAYS.forEach(function(day) { ORIG_EXERCISES[day.id] = day.exercises.slice(); });
+var activeSwap = null; // { day1: id, day2: id }
+
 function saveState() {
-  var state = { checked: {}, inputs: {}, added: {} };
+  var state = { checked: {}, inputs: {}, added: {}, swap: activeSwap };
   // Save checked state and input values for all cards
   document.querySelectorAll('.exercise-card').forEach(function(card) {
     var id = card.id.replace('card-', '');
@@ -287,8 +327,12 @@ DAYS.forEach(function(day) {
   tabsEl.appendChild(tab);
 });
 
-// Load saved state, restore added exercises first, then render
+// Load saved state, restore swap and added exercises first, then render
 var savedState = loadState();
+if (savedState && savedState.swap) {
+  activeSwap = savedState.swap;
+  applySwap(activeSwap.day1, activeSwap.day2);
+}
 if (savedState && savedState.added) {
   DAYS.forEach(function(day) {
     if (savedState.added[day.id]) day._added = savedState.added[day.id];
@@ -296,6 +340,7 @@ if (savedState && savedState.added) {
 }
 
 DAYS.forEach(function(day) { renderDay(day); });
+updateSwapInfo();
 
 // Restore input values and checked states
 if (savedState) {
@@ -397,6 +442,83 @@ function removeAdded(dayId, idx) {
       });
     }
     updateProgress(dayId);
+  }
+}
+
+// ============================================================
+// SWAP DAYS
+// ============================================================
+function openSwapModal() {
+  var sel1 = document.getElementById('swapDay1');
+  var sel2 = document.getElementById('swapDay2');
+  sel1.innerHTML = ''; sel2.innerHTML = '';
+  DAYS.forEach(function(day) {
+    sel1.innerHTML += '<option value="' + day.id + '">' + day.label + ' \u2014 ' + day.subtitle.split('\u2014')[0].trim() + '</option>';
+    sel2.innerHTML += '<option value="' + day.id + '">' + day.label + ' \u2014 ' + day.subtitle.split('\u2014')[0].trim() + '</option>';
+  });
+  // Default: Wed and Sat
+  sel1.value = 'wed'; sel2.value = 'sat';
+  document.getElementById('swapModal').classList.add('show');
+}
+
+function closeSwapModal() {
+  document.getElementById('swapModal').classList.remove('show');
+}
+
+function applySwap(day1Id, day2Id) {
+  var d1 = null, d2 = null;
+  for (var i = 0; i < DAYS.length; i++) {
+    if (DAYS[i].id === day1Id) d1 = DAYS[i];
+    if (DAYS[i].id === day2Id) d2 = DAYS[i];
+  }
+  if (!d1 || !d2 || d1 === d2) return;
+  // Swap exercises, subtitles, and colors
+  var tmpEx = d1.exercises; d1.exercises = d2.exercises; d2.exercises = tmpEx;
+  var tmpSub = d1.subtitle; d1.subtitle = d2.subtitle; d2.subtitle = tmpSub;
+  var tmpColor = d1.color; d1.color = d2.color; d2.color = tmpColor;
+  // Clear added exercises for swapped days
+  d1._added = []; d2._added = [];
+}
+
+function confirmSwap() {
+  var day1Id = document.getElementById('swapDay1').value;
+  var day2Id = document.getElementById('swapDay2').value;
+  if (day1Id === day2Id) { closeSwapModal(); return; }
+  // Undo any existing swap first
+  if (activeSwap) undoSwap(true);
+  activeSwap = { day1: day1Id, day2: day2Id };
+  applySwap(day1Id, day2Id);
+  // Re-render both days and update UI
+  DAYS.forEach(function(day) { renderDay(day); });
+  updateSwapInfo();
+  saveState();
+  closeSwapModal();
+  // Switch to first swapped day
+  switchDay(day1Id);
+}
+
+function undoSwap(silent) {
+  if (!activeSwap) return;
+  // Swap back
+  applySwap(activeSwap.day1, activeSwap.day2);
+  activeSwap = null;
+  DAYS.forEach(function(day) { renderDay(day); });
+  updateSwapInfo();
+  if (!silent) saveState();
+  switchDay(getTodayTab());
+}
+
+function updateSwapInfo() {
+  var info = document.getElementById('swapInfo');
+  if (activeSwap) {
+    var n1 = '', n2 = '';
+    for (var i = 0; i < DAYS.length; i++) {
+      if (DAYS[i].id === activeSwap.day1) n1 = DAYS[i].label;
+      if (DAYS[i].id === activeSwap.day2) n2 = DAYS[i].label;
+    }
+    info.innerHTML = n1 + ' \u21c4 ' + n2 + ' swapped <button class="swap-undo" onclick="undoSwap()">Undo</button>';
+  } else {
+    info.innerHTML = '';
   }
 }
 
