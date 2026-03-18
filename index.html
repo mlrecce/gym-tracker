@@ -109,20 +109,25 @@
   <div class="modal">
     <h3 id="modalTitle">Add Activity</h3>
     <div class="input-group">
-      <label>Type</label>
-      <select id="addType" style="width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);
-        border-radius:8px;color:var(--text);padding:10px;font-size:16px;font-family:inherit;-webkit-appearance:none;">
-        <option value="strength">Strength</option>
-        <option value="cardio">Cardio</option>
-      </select>
+      <label>Exercise</label>
+      <select id="addExercise" onchange="onAddExerciseChange()"></select>
     </div>
-    <div class="input-group">
-      <label>Exercise Name</label>
-      <input type="text" id="addName" placeholder="e.g. Vest walk, Bench press" inputmode="text">
-    </div>
-    <div class="input-group">
-      <label>Log Name (for Excel)</label>
-      <input type="text" id="addLogName" placeholder="e.g. vest walk, bench" inputmode="text">
+    <div id="customFields" style="display:none">
+      <div class="input-group">
+        <label>Type</label>
+        <select id="addType">
+          <option value="strength">Strength</option>
+          <option value="cardio">Cardio</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Exercise Name</label>
+        <input type="text" id="addName" placeholder="e.g. Vest walk, Bench press" inputmode="text">
+      </div>
+      <div class="input-group">
+        <label>Log Name (for Excel)</label>
+        <input type="text" id="addLogName" placeholder="e.g. vest walk, bench" inputmode="text">
+      </div>
     </div>
     <div class="input-group" id="addRestGroup">
       <label>Rest Timer (seconds)</label>
@@ -213,6 +218,24 @@ var DAYS = [
       {name:"Hanging knee raises",logName:"knee lift",plan:"3\u00d712 @ 0",note:"Hold at 0.",last:"12x3 (3/15)",target:{weight:"",sets:"3",reps:"12"},rest:45},
       {name:"Dead hang",logName:"hang",plan:"2\u00d7max @ 0",note:"Hold at 0.",last:"60s (3/15)",target:{weight:"",sets:"2",reps:"max"},rest:60}]}
 ];
+
+// ============================================================
+// EXERCISE CATALOG — built from DAYS so dropdown always matches Excel
+// ============================================================
+var EX_CATALOG = [];
+var _seenLog = {};
+DAYS.forEach(function(day) {
+  day.exercises.forEach(function(ex) {
+    if (_seenLog[ex.logName]) return;
+    _seenLog[ex.logName] = true;
+    EX_CATALOG.push({ name: ex.name, logName: ex.logName, type: ex.type || 'strength', rest: ex.rest || 60 });
+  });
+});
+EX_CATALOG.sort(function(a, b) {
+  if (a.type === 'cardio' && b.type !== 'cardio') return -1;
+  if (a.type !== 'cardio' && b.type === 'cardio') return 1;
+  return a.name.localeCompare(b.name);
+});
 
 // ============================================================
 // STORAGE KEY — changes weekly so old data doesn't persist forever
@@ -367,11 +390,52 @@ function openAddModal(dayId) {
   var day = null;
   for (var d = 0; d < DAYS.length; d++) { if (DAYS[d].id === dayId) { day = DAYS[d]; break; } }
   document.getElementById('modalTitle').textContent = 'Add to ' + (day ? day.label : dayId);
-  document.getElementById('addName').value = '';
-  document.getElementById('addLogName').value = '';
+  // Build dropdown
+  var sel = document.getElementById('addExercise');
+  sel.innerHTML = '<option value="">-- Select exercise --</option>';
+  var lastType = '';
+  EX_CATALOG.forEach(function(ex, i) {
+    var groupLabel = ex.type === 'cardio' ? 'Cardio' : 'Strength';
+    if (groupLabel !== lastType) {
+      if (lastType) sel.innerHTML += '</optgroup>';
+      sel.innerHTML += '<optgroup label="' + groupLabel + '">';
+      lastType = groupLabel;
+    }
+    sel.innerHTML += '<option value="' + i + '">' + ex.name + '</option>';
+  });
+  if (lastType) sel.innerHTML += '</optgroup>';
+  sel.innerHTML += '<optgroup label="Other"><option value="custom">Custom exercise...</option></optgroup>';
+  sel.value = '';
+  document.getElementById('customFields').style.display = 'none';
   document.getElementById('addRest').value = '60';
-  document.getElementById('addType').value = 'strength';
+  document.getElementById('addRestGroup').style.display = '';
   document.getElementById('addModal').classList.add('show');
+}
+
+function onAddExerciseChange() {
+  var val = document.getElementById('addExercise').value;
+  var customFields = document.getElementById('customFields');
+  var restGroup = document.getElementById('addRestGroup');
+  if (val === 'custom') {
+    customFields.style.display = 'block';
+    restGroup.style.display = '';
+    document.getElementById('addName').value = '';
+    document.getElementById('addLogName').value = '';
+    document.getElementById('addType').value = 'strength';
+    document.getElementById('addRest').value = '60';
+  } else if (val !== '') {
+    customFields.style.display = 'none';
+    var ex = EX_CATALOG[parseInt(val)];
+    if (ex.type === 'cardio') {
+      restGroup.style.display = 'none';
+    } else {
+      restGroup.style.display = '';
+      document.getElementById('addRest').value = ex.rest || 60;
+    }
+  } else {
+    customFields.style.display = 'none';
+    restGroup.style.display = '';
+  }
 }
 
 function closeAddModal() {
@@ -380,11 +444,23 @@ function closeAddModal() {
 }
 
 function confirmAdd() {
-  var type = document.getElementById('addType').value;
-  var name = document.getElementById('addName').value.trim();
-  var logName = document.getElementById('addLogName').value.trim() || name.toLowerCase();
-  var rest = parseInt(document.getElementById('addRest').value) || 60;
-  if (!name) { document.getElementById('addName').focus(); return; }
+  var selVal = document.getElementById('addExercise').value;
+  var type, name, logName, rest;
+  if (selVal === 'custom') {
+    type = document.getElementById('addType').value;
+    name = document.getElementById('addName').value.trim();
+    logName = document.getElementById('addLogName').value.trim() || name.toLowerCase();
+    rest = parseInt(document.getElementById('addRest').value) || 60;
+    if (!name) { document.getElementById('addName').focus(); return; }
+  } else if (selVal !== '') {
+    var catEx = EX_CATALOG[parseInt(selVal)];
+    type = catEx.type || 'strength';
+    name = catEx.name;
+    logName = catEx.logName;
+    rest = parseInt(document.getElementById('addRest').value) || catEx.rest || 60;
+  } else {
+    return; // Nothing selected
+  }
 
   var day = null;
   for (var d = 0; d < DAYS.length; d++) { if (DAYS[d].id === addTargetDay) { day = DAYS[d]; break; } }
