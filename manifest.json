@@ -1,0 +1,17 @@
+{
+  "name": "Gym Tracker",
+  "short_name": "Gym",
+  "description": "Weekly gym workout tracker",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1A1A2E",
+  "theme_color": "#1A1A2E",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231A1A2E' width='100' height='100' rx='20'/><text x='50' y='62' text-anchor='middle' font-size='50' fill='%232ECC71'>G</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
