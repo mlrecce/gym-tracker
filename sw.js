@@ -1,4 +1,4 @@
-var CACHE_NAME = 'gym-tracker-v2';
+var CACHE_NAME = 'gym-tracker-v3';
 var URLS_TO_CACHE = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', function(e) {
