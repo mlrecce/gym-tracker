@@ -293,7 +293,8 @@ function buildExerciseHTML(day, ex, idx, isAdded) {
       '<div class="input-group"><label>Distance</label><input type="text" id="in-' + cid + '-dist" placeholder="' +
       ((ex.defaults && ex.defaults.distance) || 'distance') + '" value="' + ((ex.defaults && ex.defaults.distance) || '') + '" inputmode="text" oninput="saveState()"></div>' +
       '<div class="input-group"><label>Time</label><input type="text" id="in-' + cid + '-time" placeholder="mm:ss" inputmode="text" oninput="saveState()"></div>' +
-      '</div></div>';
+      '</div>' +
+      '<textarea class="notes-area" id="in-' + cid + '-note" placeholder="Notes (optional)" rows="1" oninput="saveState()"></textarea></div>';
   } else {
     var pb = ex.progress ? '<span style="color:var(--green);font-size:11px;font-weight:700"> &#8593; UP</span>' : '';
     html += '<div class="exercise-card' + (isAdded ? ' added' : '') + '" id="card-' + cid + '" style="border-left-color:' + day.color + '">' +
@@ -710,8 +711,8 @@ function copyForExcel() {
       var chk = document.querySelector('#card-' + cid + ' .done-check');
       if (!chk || !chk.classList.contains('checked')) return;
       if (ex.type === 'cardio') {
-        var ds = gv('in-' + cid + '-dist'), tm = gv('in-' + cid + '-time');
-        if (ds || tm) lines.push(day.isoDate + '|' + ex.logName + '|' + ds + '|' + tm + '|');
+        var ds = gv('in-' + cid + '-dist'), tm = gv('in-' + cid + '-time'), nt_c = gv('in-' + cid + '-note');
+        if (ds || tm) lines.push(day.isoDate + '|' + ex.logName + '|' + ds + '|' + tm + '|' + nt_c);
       } else {
         var wt = gv('in-' + cid + '-wt'), rp = gv('in-' + cid + '-reps'), nt = gv('in-' + cid + '-note');
         if (wt || rp) lines.push(day.isoDate + '|' + ex.logName + '|' + wt + '|' + rp + '|' + nt);
