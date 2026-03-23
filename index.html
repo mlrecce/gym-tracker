@@ -528,21 +528,29 @@ function confirmAdd() {
     newEx = { name: name, logName: logName, target: { weight: '', sets: '', reps: '' }, rest: rest };
   }
   day._added.push(newEx);
+  // Capture current DOM state BEFORE re-render (inputs entered since page load)
+  var curState = { inputs: {}, checked: {} };
+  document.querySelectorAll('.exercise-card').forEach(function(card) {
+    var id = card.id.replace('card-', '');
+    var chk = card.querySelector('.done-check');
+    if (chk && chk.classList.contains('checked')) curState.checked[id] = true;
+    card.querySelectorAll('input, textarea').forEach(function(inp) {
+      if (inp.id && inp.value) curState.inputs[inp.id] = inp.value;
+    });
+  });
   renderDay(day);
-  // Restore existing state for untouched cards
-  if (savedState) {
-    Object.keys(savedState.inputs || {}).forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el && !el.value) el.value = savedState.inputs[id];
-    });
-    Object.keys(savedState.checked || {}).forEach(function(cid) {
-      var card = document.getElementById('card-' + cid);
-      if (card) {
-        var chk = card.querySelector('.done-check');
-        if (chk && !chk.classList.contains('checked')) { chk.classList.add('checked'); card.classList.add('completed'); }
-      }
-    });
-  }
+  // Restore live state after re-render
+  Object.keys(curState.inputs).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = curState.inputs[id];
+  });
+  Object.keys(curState.checked).forEach(function(cid) {
+    var card = document.getElementById('card-' + cid);
+    if (card) {
+      var chk = card.querySelector('.done-check');
+      if (chk) { chk.classList.add('checked'); card.classList.add('completed'); }
+    }
+  });
   updateProgress(day.id);
   saveState();
   closeAddModal();
@@ -554,25 +562,32 @@ function removeAdded(dayId, idx) {
   if (!day) return;
   var addedIdx = idx - day.exercises.length;
   if (addedIdx >= 0 && addedIdx < day._added.length) {
+    // Capture current DOM state BEFORE re-render
+    var curState = { inputs: {}, checked: {} };
+    document.querySelectorAll('.exercise-card').forEach(function(card) {
+      var id = card.id.replace('card-', '');
+      var chk = card.querySelector('.done-check');
+      if (chk && chk.classList.contains('checked')) curState.checked[id] = true;
+      card.querySelectorAll('input, textarea').forEach(function(inp) {
+        if (inp.id && inp.value) curState.inputs[inp.id] = inp.value;
+      });
+    });
     day._added.splice(addedIdx, 1);
     renderDay(day);
-    saveState();
-    // Re-restore state after re-render
-    var st = loadState();
-    if (st) {
-      Object.keys(st.inputs || {}).forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el && !el.value) el.value = st.inputs[id];
-      });
-      Object.keys(st.checked || {}).forEach(function(cid) {
-        var card = document.getElementById('card-' + cid);
-        if (card) {
-          var chk = card.querySelector('.done-check');
-          if (chk) { chk.classList.add('checked'); card.classList.add('completed'); }
-        }
-      });
-    }
+    // Restore live state after re-render
+    Object.keys(curState.inputs).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.value = curState.inputs[id];
+    });
+    Object.keys(curState.checked).forEach(function(cid) {
+      var card = document.getElementById('card-' + cid);
+      if (card) {
+        var chk = card.querySelector('.done-check');
+        if (chk) { chk.classList.add('checked'); card.classList.add('completed'); }
+      }
+    });
     updateProgress(dayId);
+    saveState();
   }
 }
 
