@@ -1,4 +1,4 @@
-var CACHE_NAME = 'gym-tracker-v4';
+var CACHE_NAME = 'gym-tracker-20260323';
 var URLS_TO_CACHE = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', function(e) {
@@ -14,5 +14,5 @@ self.addEventListener('activate', function(e) {
 });
 
 self.addEventListener('fetch', function(e) {
-  e.respondWith(caches.match(e.request).then(function(r) { return r || fetch(e.request); }));
+  e.respondWith(fetch(e.request).catch(function() { return caches.match(e.request); }));
 });
