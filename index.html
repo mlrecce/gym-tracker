@@ -175,53 +175,68 @@
 // DATA
 // ============================================================
 var DAYS = [
-  {id:"mon",label:"Mon",date:"3/23",isoDate:"2026-03-23",title:"MONDAY \u2014 March 23",subtitle:"Active Recovery \u2014 Rest Day",color:"#9B59B6",exercises:[{type:"cardio",name:"Vest walk",logName:"vest walk",fields:["distance","time"],defaults:{},plan:"5-8 mi \u2022 Recovery pace",last:"4.8mi / 18:37/mi"}]},
-  {id:"tue",label:"Tue",date:"3/24",isoDate:"2026-03-24",title:"TUESDAY \u2014 March 24",subtitle:"PUSH A \u2014 Chest + Shoulders + Triceps (Heavy)",color:"#E94560",exercises:[{type:"cardio",name:"1-mile run (warm-up)",logName:"run",fields:["distance","time"],defaults:{distance:"1mi"},plan:"Warm-up",last:"1mi / 08:44:00"},
-      {name:"Flat bench press (BB)",logName:"bench",plan:"3\u00d78-10 @ 100.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 10\u00d73 at 95.0. Go to 100.0.",last:"95: 12,10,10 (3/10)",target:{weight:"100.0",sets:"3",reps:"8"},rest:120,progress:true},
-      {name:"Incline bench (DB)",logName:"incl. bench",plan:"3\u00d710-12 @ 2x27.5 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 2x25.0. Go to 2x27.5.",last:"2x25: 12x3 (3/13)",target:{weight:"2x27.5",sets:"3",reps:"10"},rest:90,progress:true},
-      {name:"Military press (DB)",logName:"mil press",plan:"3\u00d710-12 @ 2x17.5",note:"Hold at 2x17.5. Last: 10\u00d73.",last:"2x17.5: 10x3 (3/10)",target:{weight:"2x17.5",sets:"3",reps:"10"},rest:90},
-      {name:"Pec fly (cable)",logName:"pec fly",plan:"3\u00d712 @ 115.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 110.0. Go to 115.0.",last:"110: 12x3 (3/13)",target:{weight:"115.0",sets:"3",reps:"12"},rest:60,progress:true},
-      {name:"Lateral raises (DB)",logName:"Lat lift",plan:"3\u00d712-15 @ 2x10.0",note:"Hold at 2x10.0. Last: 12\u00d73.",last:"2x10: 12x3 (3/13)",target:{weight:"2x10.0",sets:"3",reps:"12"},rest:60},
-      {name:"Skull crushers (DB)",logName:"skull crush",plan:"3\u00d710-12 @ 2x17.5",note:"Hold at 2x17.5. Last: 12\u00d72.",last:"2x17.5: 15,12 (3/10)",target:{weight:"2x17.5",sets:"3",reps:"10"},rest:60},
-      {name:"Tricep pulldown",logName:"tric pull",plan:"3\u00d712 @ 60.0",note:"Hold at 60.0. Last: 10\u00d73.",last:"60: 10x3 (3/13)",target:{weight:"60.0",sets:"3",reps:"12"},rest:60}]},
-  {id:"wed",label:"Wed",date:"3/25",isoDate:"2026-03-25",title:"WEDNESDAY \u2014 March 25",subtitle:"PULL A \u2014 Back + Biceps + Rear Delts",color:"#4A90D9",exercises:[{type:"cardio",name:"1-mile run (warm-up)",logName:"run",fields:["distance","time"],defaults:{distance:"1mi"},plan:"Warm-up",last:"1mi / 08:44:00"},
-      {name:"Deadlift",logName:"deadlift",plan:"3\u00d78-10 @ 155.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 145.0. Go to 155.0.",last:"145: 12x3 (3/14)",target:{weight:"155.0",sets:"3",reps:"8"},rest:120,progress:true},
-      {name:"Cable row",logName:"Row",plan:"3\u00d710-12 @ 60.0",note:"Hold at 60.0. Last: 10\u00d73.",last:"60: 10x3 (3/14)",target:{weight:"60.0",sets:"3",reps:"10"},rest:90},
-      {name:"Lat pulldown",logName:"lat pull dn",plan:"3\u00d710-12 @ 60.0",note:"Hold at 60.0. Last: 10\u00d73.",last:"60: 10x3 (3/14)",target:{weight:"60.0",sets:"3",reps:"10"},rest:90},
-      {name:"Face pulls (cable)",logName:"face pull",plan:"3\u00d715-20 @ 35.0",note:"Hold at 35.0. Last: 12\u00d73.",last:"35: 12x3 (3/14)",target:{weight:"35.0",sets:"3",reps:"15"},rest:45},
-      {name:"Bicep curl (DB)",logName:"curl",plan:"3\u00d710-12 @ 2x50.0",note:"Hold at 2x50.0. Last: 8\u00d72.",last:"50: 8x2 (3/2)",target:{weight:"2x50.0",sets:"3",reps:"10"},rest:60},
-      {name:"Back extension",logName:"back ext",plan:"3\u00d712 @ 50.0",note:"Hold at 50.0. Last: 12\u00d72.",last:"50: 12x2 (3/15)",target:{weight:"50.0",sets:"3",reps:"12"},rest:60}]},
-  {id:"thu",label:"Thu",date:"3/26",isoDate:"2026-03-26",title:"THURSDAY \u2014 March 26",subtitle:"LEGS A \u2014 Quads + Glutes + Core (PT)",color:"#F5A623",exercises:[{type:"cardio",name:"1-mile run (warm-up)",logName:"run",fields:["distance","time"],defaults:{distance:"1mi"},plan:"Warm-up",last:"1mi / 08:44:00"},
-      {name:"Barbell squats",logName:"squats",plan:"3\u00d710-12 @ 70.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 65.0. Go to 70.0.",last:"65: 12x3 (3/12)",target:{weight:"70.0",sets:"3",reps:"10"},rest:90,progress:true},
-      {name:"Landmine squat (T-bar)",logName:"land mine squat",plan:"3\u00d710-12 @ 75.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 70.0. Go to 75.0.",last:"70: 12x3 (3/12)",target:{weight:"75.0",sets:"3",reps:"10"},rest:90,progress:true},
-      {name:"Leg press",logName:"leg press",plan:"3\u00d710-12 @ 170.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 160.0. Go to 170.0.",last:"160: 12x3 (3/12)",target:{weight:"170.0",sets:"3",reps:"10"},rest:90,progress:true},
-      {name:"Hip thrust",logName:"hip thrust",plan:"3\u00d710 @ 150.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 140.0. Go to 150.0.",last:"140: 12x3 (3/15)",target:{weight:"150.0",sets:"3",reps:"10"},rest:90,progress:true},
+  {id:"mon",label:"Mon",date:"3/23",isoDate:"2026-03-23",title:"MONDAY \u2014 March 23",subtitle:"Active Recovery \u2014 Rest Day + Rehab",color:"#9B59B6",exercises:[
+      {type:"cardio",name:"Elliptical (low resistance)",logName:"elliptical",fields:["distance","time"],defaults:{},plan:"\u26a0 45-60 min \u2022 Replaces vest walk (mild adductor pain)",last:"4.7mi / 84mins"},
+      {name:"Adductor isometric squeeze",logName:"adductor iso",plan:"3\u00d710s hold @ BW",note:"\ud83d\udfe2 REHAB \u2014 ball between knees, gentle isometric, stop if any pain",last:"",target:{weight:"",sets:"3",reps:"10s hold"},rest:30},
+      {name:"Side-lying hip adduction",logName:"side adduction",plan:"2\u00d715 @ BW",note:"\ud83d\udfe2 REHAB \u2014 slow controlled reps, pain-free ROM only",last:"",target:{weight:"",sets:"2",reps:"15"},rest:30},
+      {name:"Gentle adductor stretch",logName:"adductor stretch",plan:"2\u00d730s each side",note:"\ud83d\udfe2 REHAB \u2014 butterfly or standing groin stretch, NO forcing",last:"",target:{weight:"",sets:"2",reps:"30s"},rest:0}]},
+  {id:"tue",label:"Tue",date:"3/24",isoDate:"2026-03-24",title:"TUESDAY \u2014 March 24",subtitle:"PUSH A \u2014 Chest + Shoulders + Triceps (Heavy)",color:"#E94560",exercises:[
+      {type:"cardio",name:"Elliptical warm-up",logName:"elliptical",fields:["distance","time"],defaults:{},plan:"\u26a0 15 min \u2022 Replaces 1-mile run",last:"1mi / 08:29:00"},
+      {name:"Flat bench press (BB)",logName:"bench",plan:"3\u00d78-10 @ 105.0",note:"Hold at 105.0. Last: 8\u00d73.",last:"105: 8x3 (3/20)",target:{weight:"105.0",sets:"3",reps:"8"},rest:120},
+      {name:"Incline bench (DB)",logName:"incl. bench",plan:"3\u00d710-12 @ 2x27.5 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 2x25.0. Go to 2x27.5.",last:"2x25: 12x3 (3/21)",target:{weight:"2x27.5",sets:"3",reps:"10"},rest:90,progress:true},
+      {name:"Military press (DB)",logName:"mil press",plan:"3\u00d710-12 @ 2x20.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 2x17.5. Go to 2x20.0.",last:"2x17.5: 12x3 (3/17)",target:{weight:"2x20.0",sets:"3",reps:"10"},rest:90,progress:true},
+      {name:"Pec fly (cable)",logName:"pec fly",plan:"3\u00d712 @ 120.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 115.0. Go to 120.0.",last:"115: 12x3 (3/21)",target:{weight:"120.0",sets:"3",reps:"12"},rest:60,progress:true},
+      {name:"Lateral raises (DB)",logName:"Lat lift",plan:"3\u00d712-15 @ 2x10.0",note:"Hold at 2x10.0. Last: 10\u00d73.",last:"2x10: 10x3 (3/21)",target:{weight:"2x10.0",sets:"3",reps:"12"},rest:60},
+      {name:"Skull crushers (DB)",logName:"skull crush",plan:"3\u00d710-12 @ 2x20.0",note:"Hold at 2x20.0. Last: 8\u00d73.",last:"2x20: 8x3 (3/21)",target:{weight:"2x20.0",sets:"3",reps:"10"},rest:60},
+      {name:"Tricep pulldown",logName:"tric pull",plan:"3\u00d712 @ 65.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 60.0. Go to 65.0.",last:"60: 12x3 (3/21)",target:{weight:"65.0",sets:"3",reps:"12"},rest:60,progress:true}]},
+  {id:"wed",label:"Wed",date:"3/25",isoDate:"2026-03-25",title:"WEDNESDAY \u2014 March 25",subtitle:"PULL A \u2014 Back + Biceps + Rear Delts",color:"#4A90D9",exercises:[
+      {type:"cardio",name:"Elliptical warm-up",logName:"elliptical",fields:["distance","time"],defaults:{},plan:"\u26a0 15 min \u2022 Replaces 1-mile run",last:"1mi / 08:29:00"},
+      {name:"Deadlift",logName:"deadlift",plan:"3\u00d78-10 @ 135.0 \u2b07",note:"\u26a0 REDUCED from 155\u2192135 \u2014 narrow stance, stop if groin pain. Adductors assist in deadlift.",last:"155: 10x3 (3/18)",target:{weight:"135.0",sets:"3",reps:"8"},rest:120},
+      {name:"Cable row",logName:"Row",plan:"3\u00d710-12 @ 60.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 50.0. Go to 60.0.",last:"50: 12x3 (3/18)",target:{weight:"60.0",sets:"3",reps:"10"},rest:90,progress:true},
+      {name:"Lat pulldown",logName:"lat pull dn",plan:"3\u00d710-12 @ 60.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 50.0. Go to 60.0.",last:"50: 12x3 (3/22)",target:{weight:"60.0",sets:"3",reps:"10"},rest:90,progress:true},
+      {name:"Face pulls (cable)",logName:"face pull",plan:"3\u00d715-20 @ 35.0",note:"Hold at 35.0. Last: 12\u00d73.",last:"35: 12x3 (3/18)",target:{weight:"35.0",sets:"3",reps:"15"},rest:45},
+      {name:"Bicep curl (DB)",logName:"curl",plan:"3\u00d710-12 @ 2x22.5 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 2x20.0. Go to 2x22.5.",last:"2x20: 12x3 (3/22)",target:{weight:"2x22.5",sets:"3",reps:"10"},rest:60,progress:true},
+      {name:"Back extension",logName:"back ext",plan:"3\u00d712 @ 60.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 50.0. Go to 60.0.",last:"50: 12x3 (3/22)",target:{weight:"60.0",sets:"3",reps:"12"},rest:60,progress:true}]},
+  {id:"thu",label:"Thu",date:"3/26",isoDate:"2026-03-26",title:"THURSDAY \u2014 March 26",subtitle:"\u26a0 LEGS A MODIFIED \u2014 Adductor-Safe + Rehab + Core",color:"#F5A623",exercises:[
+      {type:"cardio",name:"Elliptical warm-up",logName:"elliptical",fields:["distance","time"],defaults:{},plan:"\u26a0 15 min \u2022 Replaces 1-mile run",last:"1mi / 08:29:00"},
+      {name:"Leg extension (machine)",logName:"leg ext",plan:"3\u00d712-15 @ light-mod",note:"\u26a0 Replaces barbell squats \u2014 isolates quads, minimal adductor load",last:"NEW",target:{weight:"",sets:"3",reps:"12"},rest:60},
+      {name:"Hamstring curl (cable)",logName:"Hstring curl",plan:"3\u00d712 @ 70.0",note:"\u26a0 Moved from Sun \u2014 minimal adductor involvement",last:"70: 15x3 (3/15)",target:{weight:"70.0",sets:"3",reps:"12"},rest:60},
+      {name:"Seated calf raise",logName:"calf raise",plan:"3\u00d715-20 @ moderate",note:"\u26a0 Replaces leg press \u2014 calves are safe, maintain lower leg work",last:"NEW",target:{weight:"",sets:"3",reps:"15"},rest:45},
+      {name:"Hip thrust",logName:"hip thrust",plan:"3\u00d710 @ 120.0 \u2b07",note:"\u26a0 REDUCED from 150\u2192120 \u2014 narrow stance, test for pain before loading",last:"140: 12x3 (3/15)",target:{weight:"120.0",sets:"3",reps:"10"},rest:90},
       {name:"Hanging knee raises",logName:"knee lift",plan:"3\u00d712 @ 0",note:"Hold at 0.",last:"12x3 (3/15)",target:{weight:"",sets:"3",reps:"12"},rest:45},
-      {name:"Dead hang",logName:"hang",plan:"2\u00d7max @ 0",note:"Hold at 0.",last:"60s (3/15)",target:{weight:"",sets:"2",reps:"max"},rest:60}]},
-  {id:"fri",label:"Fri",date:"3/27",isoDate:"2026-03-27",title:"FRIDAY \u2014 March 27",subtitle:"PUSH B \u2014 Shoulders + Chest (Volume)",color:"#E94560",exercises:[{type:"cardio",name:"1-mile run (warm-up)",logName:"run",fields:["distance","time"],defaults:{distance:"1mi"},plan:"Warm-up",last:"1mi / 08:44:00"},
-      {name:"HS shoulder press",logName:"HS sh press",plan:"3\u00d710-12 @ 60.0",note:"Hold at 60.0. Last: 12\u00d72.",last:"60: 12x2 (3/14)",target:{weight:"60.0",sets:"3",reps:"10"},rest:90},
-      {name:"Incline bench (DB)",logName:"incl. bench",plan:"3\u00d710-12 @ 2x27.5 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 2x25.0. Go to 2x27.5.",last:"2x25: 12x3 (3/13)",target:{weight:"2x27.5",sets:"3",reps:"10"},rest:90,progress:true},
-      {name:"Pec fly (cable)",logName:"pec fly",plan:"3\u00d712 @ 115.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 110.0. Go to 115.0.",last:"110: 12x3 (3/13)",target:{weight:"115.0",sets:"3",reps:"12"},rest:60,progress:true},
-      {name:"Lateral raises (DB)",logName:"Lat lift",plan:"3\u00d712-15 @ 2x10.0",note:"Hold at 2x10.0. Last: 12\u00d73.",last:"2x10: 12x3 (3/13)",target:{weight:"2x10.0",sets:"3",reps:"12"},rest:60},
+      {name:"Dead hang",logName:"hang",plan:"2\u00d7max @ 0",note:"Hold at 0.",last:"60s (3/15)",target:{weight:"",sets:"2",reps:"max"},rest:60},
+      {name:"Adductor isometric squeeze",logName:"adductor iso",plan:"3\u00d715s hold @ BW",note:"\ud83d\udfe2 REHAB \u2014 progress from 10s holds on Mon",last:"",target:{weight:"",sets:"3",reps:"15s hold"},rest:30},
+      {name:"Copenhagen plank (short lever)",logName:"copenhagen",plan:"2\u00d710s each side",note:"\ud83d\udfe2 REHAB \u2014 key adductor strengthening, knee on bench not foot. Skip if painful.",last:"",target:{weight:"",sets:"2",reps:"10s"},rest:30}]},
+  {id:"fri",label:"Fri",date:"3/27",isoDate:"2026-03-27",title:"FRIDAY \u2014 March 27",subtitle:"PUSH B \u2014 Shoulders + Chest (Volume)",color:"#E94560",exercises:[
+      {type:"cardio",name:"Elliptical warm-up",logName:"elliptical",fields:["distance","time"],defaults:{},plan:"\u26a0 15 min \u2022 Replaces 1-mile run",last:"1mi / 08:29:00"},
+      {name:"HS shoulder press",logName:"HS sh press",plan:"3\u00d710-12 @ 65.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 60.0. Go to 65.0.",last:"60: 12x3 (3/21)",target:{weight:"65.0",sets:"3",reps:"10"},rest:90,progress:true},
+      {name:"Incline bench (DB)",logName:"incl. bench",plan:"3\u00d710-12 @ 2x27.5 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 2x25.0. Go to 2x27.5.",last:"2x25: 12x3 (3/21)",target:{weight:"2x27.5",sets:"3",reps:"10"},rest:90,progress:true},
+      {name:"Pec fly (cable)",logName:"pec fly",plan:"3\u00d712 @ 120.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 115.0. Go to 120.0.",last:"115: 12x3 (3/21)",target:{weight:"120.0",sets:"3",reps:"12"},rest:60,progress:true},
+      {name:"Lateral raises (DB)",logName:"Lat lift",plan:"3\u00d712-15 @ 2x10.0",note:"Hold at 2x10.0. Last: 10\u00d73.",last:"2x10: 10x3 (3/21)",target:{weight:"2x10.0",sets:"3",reps:"12"},rest:60},
       {name:"Push-ups",logName:"push ups",plan:"2\u00d7max @ 0",note:"Hold at 0.",last:"9x2 (3/13)",target:{weight:"",sets:"2",reps:"max"},rest:60},
-      {name:"Tricep pulldown",logName:"tric pull",plan:"3\u00d712 @ 60.0",note:"Hold at 60.0. Last: 10\u00d73.",last:"60: 10x3 (3/13)",target:{weight:"60.0",sets:"3",reps:"12"},rest:60}]},
-  {id:"sat",label:"Sat",date:"3/28",isoDate:"2026-03-28",title:"SATURDAY \u2014 March 28",subtitle:"PULL B \u2014 5K + Back + Biceps (Long Session)",color:"#4A90D9",exercises:[{type:"cardio",name:"5K run",logName:"run",fields:["distance","time"],defaults:{distance:"5k"},plan:"Morning run",last:"1mi / 08:44:00"},
-      {type:"cardio",name:"Vest walk",logName:"vest walk",fields:["distance","time"],defaults:{},plan:"5-8 mi \u2022 Recovery pace",last:"4.8mi / 18:37/mi"},
-      {name:"Bent-over row (BB)",logName:"bent row",plan:"3\u00d78-10 @ 90.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 85.0. Go to 90.0.",last:"85: 12x3 (3/11)",target:{weight:"90.0",sets:"3",reps:"8"},rest:90,progress:true},
-      {name:"Lat pulldown",logName:"lat pull dn",plan:"3\u00d710-12 @ 60.0",note:"Hold at 60.0. Last: 10\u00d73.",last:"60: 10x3 (3/14)",target:{weight:"60.0",sets:"3",reps:"10"},rest:60},
-      {name:"Negative pull-ups",logName:"neg pull up",plan:"3\u00d73-5 @ 3.0",note:"Hold at 3.0.",last:"3 (3/7)",target:{weight:"3.0",sets:"3",reps:"3"},rest:90},
-      {name:"Face pulls (cable)",logName:"face pull",plan:"3\u00d715-20 @ 35.0",note:"Hold at 35.0. Last: 12\u00d73.",last:"35: 12x3 (3/14)",target:{weight:"35.0",sets:"3",reps:"15"},rest:45},
-      {name:"Hammer curl (DB)",logName:"hammer curl",plan:"3\u00d710-12 @ 2x22.5",note:"Hold at 2x22.5. Last: 10\u00d73.",last:"2x22.5: 10x3 (3/14)",target:{weight:"2x22.5",sets:"3",reps:"10"},rest:60},
+      {name:"Tricep pulldown",logName:"tric pull",plan:"3\u00d712 @ 65.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 60.0. Go to 65.0.",last:"60: 12x3 (3/21)",target:{weight:"65.0",sets:"3",reps:"12"},rest:60,progress:true}]},
+  {id:"sat",label:"Sat",date:"3/28",isoDate:"2026-03-28",title:"SATURDAY \u2014 March 28",subtitle:"\u26a0 PULL B \u2014 Elliptical + Back + Biceps (Long Session)",color:"#4A90D9",exercises:[
+      {type:"cardio",name:"Elliptical (moderate)",logName:"elliptical",fields:["distance","time"],defaults:{},plan:"\u26a0 30-40 min \u2022 Replaces 5K run",last:"1mi / 08:29:00"},
+      {type:"cardio",name:"Elliptical (cooldown)",logName:"elliptical",fields:["distance","time"],defaults:{},plan:"\u26a0 15-20 min \u2022 Replaces vest walk",last:"4.7mi / 84mins"},
+      {name:"Bent-over row (BB)",logName:"bent row",plan:"3\u00d78-10 @ 90.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 85.0. Go to 90.0.",last:"85: 12x3 (3/20)",target:{weight:"90.0",sets:"3",reps:"8"},rest:90,progress:true},
+      {name:"Lat pulldown",logName:"lat pull dn",plan:"3\u00d710-12 @ 60.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 50.0. Go to 60.0.",last:"50: 12x3 (3/22)",target:{weight:"60.0",sets:"3",reps:"10"},rest:60,progress:true},
+      {name:"Negative pull-ups",logName:"neg pull up",plan:"3\u00d73-5 @ BW",note:"No recent data \u2014 start at plan weight.",last:"\u2014",target:{weight:"",sets:"3",reps:"3"},rest:90},
+      {name:"Face pulls (cable)",logName:"face pull",plan:"3\u00d715-20 @ 35.0",note:"Hold at 35.0. Last: 12\u00d73.",last:"35: 12x3 (3/18)",target:{weight:"35.0",sets:"3",reps:"15"},rest:45},
+      {name:"Hammer curl (DB)",logName:"hammer curl",plan:"3\u00d710-12 @ 2x25.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 2x22.5. Go to 2x25.0.",last:"2x22.5: 12x3 (3/20)",target:{weight:"2x25.0",sets:"3",reps:"10"},rest:60,progress:true},
       {name:"Plank",logName:"plank",plan:"2\u00d790s @ 0",note:"Hold at 0.",last:"2x90s (3/11)",target:{weight:"",sets:"2",reps:"90s"},rest:45}]},
-  {id:"sun",label:"Sun",date:"3/29",isoDate:"2026-03-29",title:"SUNDAY \u2014 March 29",subtitle:"LEGS B \u2014 Posterior Chain + Glutes + Core",color:"#F5A623",exercises:[{type:"cardio",name:"1-mile run (warm-up)",logName:"run",fields:["distance","time"],defaults:{distance:"1mi"},plan:"Warm-up",last:"1mi / 08:44:00"},
-      {type:"cardio",name:"Vest walk",logName:"vest walk",fields:["distance","time"],defaults:{},plan:"5-8 mi \u2022 Recovery pace",last:"4.8mi / 18:37/mi"},
-      {name:"Lunge walk (DB)",logName:"lunge walk",plan:"2\u00d712-15 @ 2x17.5",note:"Hold at 2x17.5. Last: 14\u00d72.",last:"2x17.5: 14x2 (3/15)",target:{weight:"2x17.5",sets:"2",reps:"12"},rest:90},
-      {name:"Hip thrust",logName:"hip thrust",plan:"3\u00d710-12 @ 150.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 140.0. Go to 150.0.",last:"140: 12x3 (3/15)",target:{weight:"150.0",sets:"3",reps:"10"},rest:90,progress:true},
-      {name:"Hamstring curl (cable)",logName:"Hstring curl",plan:"3\u00d712 @ 75.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 15\u00d73 at 70.0. Go to 75.0.",last:"70: 15x3 (3/15)",target:{weight:"75.0",sets:"3",reps:"12"},rest:60,progress:true},
-      {name:"Back extension",logName:"back ext",plan:"3\u00d712 @ 50.0",note:"Hold at 50.0. Last: 12\u00d72.",last:"50: 12x2 (3/15)",target:{weight:"50.0",sets:"3",reps:"12"},rest:60},
-      {name:"Weighted step-ups (DB)",logName:"weight step",plan:"2\u00d712 @ 2x14.5 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d72 at 2x12.0. Go to 2x14.5.",last:"2x12: 12x2 (3/15)",target:{weight:"2x14.5",sets:"2",reps:"12"},rest:60,progress:true},
+  {id:"sun",label:"Sun",date:"3/29",isoDate:"2026-03-29",title:"SUNDAY \u2014 March 29",subtitle:"\u26a0 LEGS B MODIFIED \u2014 Posterior Chain (Adductor-Safe) + Rehab + Core",color:"#F5A623",exercises:[
+      {type:"cardio",name:"Elliptical warm-up",logName:"elliptical",fields:["distance","time"],defaults:{},plan:"\u26a0 15 min \u2022 Replaces 1-mile run",last:"1mi / 08:29:00"},
+      {type:"cardio",name:"Elliptical (moderate)",logName:"elliptical",fields:["distance","time"],defaults:{},plan:"\u26a0 30 min \u2022 Replaces vest walk",last:"4.7mi / 84mins"},
+      {name:"Leg extension (machine)",logName:"leg ext",plan:"3\u00d712-15 @ light-mod",note:"\u26a0 Replaces lunge walks \u2014 lunges heavily load adductors",last:"NEW",target:{weight:"",sets:"3",reps:"12"},rest:60},
+      {name:"Hip thrust",logName:"hip thrust",plan:"3\u00d710-12 @ 120.0 \u2b07",note:"\u26a0 REDUCED from 150\u2192120 \u2014 narrow stance, test for pain",last:"140: 12x3 (3/15)",target:{weight:"120.0",sets:"3",reps:"10"},rest:90},
+      {name:"Hamstring curl (cable)",logName:"Hstring curl",plan:"3\u00d712 @ 75.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 15\u00d73 at 70.0. Go to 75.0. \u2705 Safe \u2014 minimal adductor.",last:"70: 15x3 (3/15)",target:{weight:"75.0",sets:"3",reps:"12"},rest:60,progress:true},
+      {name:"Back extension",logName:"back ext",plan:"3\u00d712 @ 60.0 \u2191",note:"\u2191 PROGRESS \u2014 hit 12\u00d73 at 50.0. Go to 60.0. \u2705 Safe \u2014 no adductor loading.",last:"50: 12x3 (3/22)",target:{weight:"60.0",sets:"3",reps:"12"},rest:60,progress:true},
+      {name:"Seated calf raise",logName:"calf raise",plan:"3\u00d715-20 @ moderate",note:"\u26a0 Replaces step-ups \u2014 step-ups engage adductors for stability",last:"NEW",target:{weight:"",sets:"3",reps:"15"},rest:45},
       {name:"Hanging knee raises",logName:"knee lift",plan:"3\u00d712 @ 0",note:"Hold at 0.",last:"12x3 (3/15)",target:{weight:"",sets:"3",reps:"12"},rest:45},
-      {name:"Dead hang",logName:"hang",plan:"2\u00d7max @ 0",note:"Hold at 0.",last:"60s (3/15)",target:{weight:"",sets:"2",reps:"max"},rest:60}]}
+      {name:"Dead hang",logName:"hang",plan:"2\u00d7max @ 0",note:"Hold at 0.",last:"60s (3/15)",target:{weight:"",sets:"2",reps:"max"},rest:60},
+      {name:"Adductor isometric squeeze",logName:"adductor iso",plan:"3\u00d720s hold @ BW",note:"\ud83d\udfe2 REHAB \u2014 progressed from 15s holds on Thu",last:"",target:{weight:"",sets:"3",reps:"20s hold"},rest:30},
+      {name:"Copenhagen plank (short lever)",logName:"copenhagen",plan:"3\u00d712s each side",note:"\ud83d\udfe2 REHAB \u2014 progress from 10s on Thu if pain-free",last:"",target:{weight:"",sets:"3",reps:"12s"},rest:30},
+      {name:"Gentle adductor stretch",logName:"adductor stretch",plan:"2\u00d730s each side",note:"\ud83d\udfe2 REHAB \u2014 maintain ROM, no forcing",last:"",target:{weight:"",sets:"2",reps:"30s"},rest:0}]}
 ];
 
 // ============================================================
@@ -528,29 +543,21 @@ function confirmAdd() {
     newEx = { name: name, logName: logName, target: { weight: '', sets: '', reps: '' }, rest: rest };
   }
   day._added.push(newEx);
-  // Capture current DOM state BEFORE re-render (inputs entered since page load)
-  var curState = { inputs: {}, checked: {} };
-  document.querySelectorAll('.exercise-card').forEach(function(card) {
-    var id = card.id.replace('card-', '');
-    var chk = card.querySelector('.done-check');
-    if (chk && chk.classList.contains('checked')) curState.checked[id] = true;
-    card.querySelectorAll('input, textarea').forEach(function(inp) {
-      if (inp.id && inp.value) curState.inputs[inp.id] = inp.value;
-    });
-  });
   renderDay(day);
-  // Restore live state after re-render
-  Object.keys(curState.inputs).forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.value = curState.inputs[id];
-  });
-  Object.keys(curState.checked).forEach(function(cid) {
-    var card = document.getElementById('card-' + cid);
-    if (card) {
-      var chk = card.querySelector('.done-check');
-      if (chk) { chk.classList.add('checked'); card.classList.add('completed'); }
-    }
-  });
+  // Restore existing state for untouched cards
+  if (savedState) {
+    Object.keys(savedState.inputs || {}).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && !el.value) el.value = savedState.inputs[id];
+    });
+    Object.keys(savedState.checked || {}).forEach(function(cid) {
+      var card = document.getElementById('card-' + cid);
+      if (card) {
+        var chk = card.querySelector('.done-check');
+        if (chk && !chk.classList.contains('checked')) { chk.classList.add('checked'); card.classList.add('completed'); }
+      }
+    });
+  }
   updateProgress(day.id);
   saveState();
   closeAddModal();
@@ -562,32 +569,25 @@ function removeAdded(dayId, idx) {
   if (!day) return;
   var addedIdx = idx - day.exercises.length;
   if (addedIdx >= 0 && addedIdx < day._added.length) {
-    // Capture current DOM state BEFORE re-render
-    var curState = { inputs: {}, checked: {} };
-    document.querySelectorAll('.exercise-card').forEach(function(card) {
-      var id = card.id.replace('card-', '');
-      var chk = card.querySelector('.done-check');
-      if (chk && chk.classList.contains('checked')) curState.checked[id] = true;
-      card.querySelectorAll('input, textarea').forEach(function(inp) {
-        if (inp.id && inp.value) curState.inputs[inp.id] = inp.value;
-      });
-    });
     day._added.splice(addedIdx, 1);
     renderDay(day);
-    // Restore live state after re-render
-    Object.keys(curState.inputs).forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.value = curState.inputs[id];
-    });
-    Object.keys(curState.checked).forEach(function(cid) {
-      var card = document.getElementById('card-' + cid);
-      if (card) {
-        var chk = card.querySelector('.done-check');
-        if (chk) { chk.classList.add('checked'); card.classList.add('completed'); }
-      }
-    });
-    updateProgress(dayId);
     saveState();
+    // Re-restore state after re-render
+    var st = loadState();
+    if (st) {
+      Object.keys(st.inputs || {}).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && !el.value) el.value = st.inputs[id];
+      });
+      Object.keys(st.checked || {}).forEach(function(cid) {
+        var card = document.getElementById('card-' + cid);
+        if (card) {
+          var chk = card.querySelector('.done-check');
+          if (chk) { chk.classList.add('checked'); card.classList.add('completed'); }
+        }
+      });
+    }
+    updateProgress(dayId);
   }
 }
 
