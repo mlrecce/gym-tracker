@@ -31,6 +31,7 @@
     letter-spacing:1px; margin:20px 0 12px 0; padding-top:8px; border-top:1px solid rgba(26,188,156,0.2); }
   .section-divider:first-child { margin-top:0; border-top:none; }
   .section-divider.workout { color:var(--text); margin-top:24px; border-top-color:rgba(255,255,255,0.15); }
+
   .exercise-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
   .exercise-name { font-size:15px; font-weight:600; }
   .exercise-plan { font-size:13px; color:var(--dim); margin-bottom:10px; }
@@ -428,16 +429,7 @@ function buildExerciseHTML(day, ex, idx, isAdded) {
   var occLabel = occNum > 0 ? '<span class="occurrence-label">#' + occNum + '</span>' : '';
   var repeatBtn = '<button class="repeat-btn" onclick="repeatExercise(\'' + day.id + '\',' + idx + ')" title="Add another">+</button>';
   var html = '';
-  if (ex.type === 'stretch') {
-    html += '<div class="exercise-card stretch' + (isAdded ? ' added' : '') + '" id="card-' + cid + '">' +
-      (isAdded ? '<button class="remove-btn" onclick="removeAdded(\'' + day.id + '\',' + idx + ')">\u00d7</button>' : '') +
-      '<div class="exercise-header"><span class="exercise-name" style="color:#1ABC9C">' + ex.name + occLabel + '</span>' +
-      '<div style="display:flex;align-items:center;gap:8px">' +
-      '<div class="rest-timer" onclick="startTimer(this,' + (ex.rest||30) + ')">' + (ex.rest||30) + 's</div>' +
-      '<div class="done-check" onclick="toggleDone(\'' + cid + '\')"></div>' + repeatBtn + '</div></div>' +
-      '<div class="exercise-plan">' + (ex.plan||'') + (ex.note ? ' &bull; ' + ex.note : '') + '</div>' +
-      '<textarea class="notes-area" id="in-' + cid + '-note" placeholder="Notes (optional)" rows="1" oninput="saveState()"></textarea></div>';
-  } else if (ex.type === 'cardio') {
+  if (ex.type === 'cardio') {
     html += '<div class="exercise-card cardio' + (isAdded ? ' added' : '') + '" id="card-' + cid + '">' +
       (isAdded ? '<button class="remove-btn" onclick="removeAdded(\'' + day.id + '\',' + idx + ')">\u00d7</button>' : '') +
       '<div class="exercise-header"><span class="exercise-name" style="color:var(--green)">' + ex.name + occLabel + '</span>' +
@@ -447,6 +439,18 @@ function buildExerciseHTML(day, ex, idx, isAdded) {
       '<div class="input-group"><label>Distance</label><input type="text" id="in-' + cid + '-dist" placeholder="' +
       ((ex.defaults && ex.defaults.distance) || 'distance') + '" value="' + ((ex.defaults && ex.defaults.distance) || '') + '" inputmode="text" oninput="saveState()"></div>' +
       '<div class="input-group"><label>Time</label><input type="text" id="in-' + cid + '-time" placeholder="mm:ss" inputmode="text" oninput="saveState()"></div>' +
+      '</div>' +
+      '<textarea class="notes-area" id="in-' + cid + '-note" placeholder="Notes (optional)" rows="1" oninput="saveState()"></textarea></div>';
+  } else if (ex.type === 'stretch') {
+    html += '<div class="exercise-card stretch' + (isAdded ? ' added' : '') + '" id="card-' + cid + '">' +
+      (isAdded ? '<button class="remove-btn" onclick="removeAdded(\'' + day.id + '\',' + idx + ')">\u00d7</button>' : '') +
+      '<div class="exercise-header"><span class="exercise-name" style="color:#1ABC9C">' + ex.name + occLabel + '</span>' +
+      '<div style="display:flex;align-items:center">' + '<div class="done-check" onclick="toggleDone(\'' + cid + '\')"></div>' + repeatBtn + '</div></div>' +
+      '<div class="exercise-plan">' + ex.plan +
+      (ex.note ? ' &bull; <span style="color:var(--dim)">' + ex.note + '</span>' : '') + '</div>' +
+      '<div class="input-row" style="justify-content:space-between;align-items:center">' +
+      '<div style="padding-top:0"><div class="rest-timer" onclick="startTimer(this,' + (ex.rest||30) + ')">' +
+      (ex.rest||30) + 's</div></div>' +
       '</div>' +
       '<textarea class="notes-area" id="in-' + cid + '-note" placeholder="Notes (optional)" rows="1" oninput="saveState()"></textarea></div>';
   } else {
@@ -485,7 +489,7 @@ function renderDay(day) {
     '<div class="day-subtitle">' + day.subtitle + '</div>' +
     '<div class="progress-bar"><div class="progress-fill" id="progress-' + day.id + '" style="width:0%"></div></div>' +
     '<div style="height:12px"></div>';
-  var hasStretches = allEx.some(function(e){return e.type==='stretch';});
+  var hasStretches = allEx.some(function(e) { return e.type === 'stretch'; });
   var stretchShown = false, workoutShown = false;
   allEx.forEach(function(ex, i) {
     if (hasStretches && ex.type === 'stretch' && !stretchShown) {
@@ -565,11 +569,9 @@ function buildCurrentCatalog() {
   EXTRA_CARDIO.forEach(function(ex) {
     if (!seen[ex.logName]) { seen[ex.logName] = true; catalog.push(ex); }
   });
-  var typeOrder = {cardio:0, stretch:1, strength:2};
   catalog.sort(function(a, b) {
-    var ta = typeOrder[a.type] !== undefined ? typeOrder[a.type] : 2;
-    var tb = typeOrder[b.type] !== undefined ? typeOrder[b.type] : 2;
-    if (ta !== tb) return ta - tb;
+    if (a.type === 'cardio' && b.type !== 'cardio') return -1;
+    if (a.type !== 'cardio' && b.type === 'cardio') return 1;
     return a.name.localeCompare(b.name);
   });
   return catalog;
@@ -661,7 +663,7 @@ function confirmAdd() {
   if (type === 'cardio') {
     newEx = { type: 'cardio', name: name, logName: logName, fields: ['distance', 'time'], defaults: {} };
   } else if (type === 'stretch') {
-    newEx = { type: 'stretch', name: name, logName: logName, plan: '', note: '', target: { sets: '', reps: '' }, rest: rest };
+    newEx = { type: 'stretch', name: name, logName: logName, plan: '', note: '', target: { sets: '2', reps: '30s' }, rest: rest || 30 };
   } else {
     newEx = { name: name, logName: logName, target: { weight: '', sets: '', reps: '' }, rest: rest };
   }
@@ -727,6 +729,8 @@ function repeatExercise(dayId, idx) {
   var newEx;
   if (ex.type === 'cardio') {
     newEx = { type: 'cardio', name: ex.name, logName: ex.logName, fields: ex.fields || ['distance', 'time'], defaults: {} };
+  } else if (ex.type === 'stretch') {
+    newEx = { type: 'stretch', name: ex.name, logName: ex.logName, plan: ex.plan || '', note: ex.note || '', target: { sets: (ex.target && ex.target.sets) || '2', reps: (ex.target && ex.target.reps) || '30s' }, rest: ex.rest || 30 };
   } else {
     newEx = { name: ex.name, logName: ex.logName, target: { weight: (ex.target && ex.target.weight) || '', sets: (ex.target && ex.target.sets) || '', reps: (ex.target && ex.target.reps) || '' }, rest: ex.rest || 60 };
   }
