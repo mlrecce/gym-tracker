@@ -1501,10 +1501,24 @@ _wb_scan.close()
 if _custom_count:
     print(f"Found {_custom_count} custom exercise(s) in summary sheet")
 
-# Use the actual date range from the data
+# Use the actual date range from the data (max of scale data and exercise data)
 START_DATE = datetime(2026, 1, 1)
 last_date = valid[2].iloc[-1]
-END_DATE = last_date if isinstance(last_date, datetime) else datetime(2026, 12, 31)
+# Also scan the summary sheet for the last date with exercise data
+_ws_sum_scan = _wb_dst['summary']
+_last_exercise_date = None
+for _r in range(3, _ws_sum_scan.max_row + 1):
+    _d = _ws_sum_scan.cell(_r, 3).value
+    if not isinstance(_d, datetime):
+        continue
+    if any(_ws_sum_scan.cell(_r, _c).value is not None for _c in range(6, _ws_sum_scan.max_column + 1)):
+        _last_exercise_date = _d
+if isinstance(last_date, datetime):
+    END_DATE = max(last_date, _last_exercise_date) if _last_exercise_date else last_date
+elif _last_exercise_date:
+    END_DATE = _last_exercise_date
+else:
+    END_DATE = datetime(2026, 12, 31)
 
 # re is already imported at the top
 
