@@ -1,0 +1,70 @@
+{
+  "_comment": "Edit this file to change your stretching routine. monday_setup.py reads it automatically.",
+  "_format": "Each exercise: name, logName (for Excel export), plan (display text), note (coaching cue), sets, reps, rest (seconds between sets). Section headers are just labels.",
+
+  "core_routine": [
+    { "section": "ANKLE DORSIFLEXION" },
+    { "name": "Wall ankle stretch (each side)",        "logName": "wall ankle stretch",   "plan": "3\u00d730s",              "note": "Face wall, drive knee forward over toes keeping heel down. Track max distance.", "sets": "3", "reps": "30s", "rest": 30 },
+    { "name": "Banded ankle mobilization (each side)",  "logName": "banded ankle mob",     "plan": "2\u00d715 reps",          "note": "Band around front ankle, step back for tension. Rock knee forward/back. No band? Use towel.", "sets": "2", "reps": "15", "rest": 15 },
+    { "name": "Calf stretch on step (each side)",       "logName": "calf stretch",         "plan": "2\u00d730s",              "note": "Drop heel below step. Straight leg then bent knee — both positions matter for squat depth.", "sets": "2", "reps": "30s", "rest": 30 },
+
+    { "section": "THORACIC SPINE & SHOULDERS" },
+    { "name": "Foam roll thoracic extension",           "logName": "foam roll thoracic",   "plan": "2\u00d730s (3 positions)","note": "Roll across upper back. Extend back over roll at upper, mid, and lower thoracic.", "sets": "2", "reps": "30s", "rest": 30 },
+    { "name": "Open book rotation (each side)",         "logName": "open book rotation",   "plan": "2\u00d78 reps",           "note": "Side-lying, knees stacked at 90\u00b0. Top arm opens to opposite side, follow with eyes.", "sets": "2", "reps": "8",   "rest": 20 },
+    { "name": "Wall slide (wall angel progression)",    "logName": "wall slides",          "plan": "3\u00d78 reps",           "note": "Back, head, glutes on wall. Slide arms up as high as possible without losing contact.", "sets": "3", "reps": "8",   "rest": 20 },
+    { "name": "Doorway pec stretch (each side)",        "logName": "doorway pec stretch",  "plan": "2\u00d730s",              "note": "Forearm on door frame at 90\u00b0. Step through gently. Two angles: elbow at and above shoulder height.", "sets": "2", "reps": "30s", "rest": 30 },
+
+    { "section": "HIP MOBILITY" },
+    { "name": "90/90 hip stretch (each side)",          "logName": "90/90 hip stretch",    "plan": "2\u00d730s",              "note": "Front and back leg at 90\u00b0. Tall spine, lean forward over front shin.", "sets": "2", "reps": "30s", "rest": 30 },
+    { "name": "Half-kneeling hip flexor stretch (each)","logName": "hip flexor stretch",   "plan": "2\u00d730s",              "note": "Rear knee on pad. Squeeze glute, shift forward gently. Keep torso tall.", "sets": "2", "reps": "30s", "rest": 30 },
+    { "name": "Gentle adductor stretch (seated)",       "logName": "adductor stretch",     "plan": "2\u00d720s",              "note": "\ud83d\udfe2 GENTLE \u2014 butterfly position, no forcing. Recovering adductor. Reduce if any pain.", "sets": "2", "reps": "20s", "rest": 20 }
+  ],
+
+  "balance_block": [
+    { "level": 1, "section": "BALANCE \u2014 LEVEL 1 (Current)" },
+    { "name": "Single-leg stand, eyes closed (each)",   "logName": "SL stand eyes closed", "plan": "3\u00d7max hold",         "note": "15-20s goal. Eyes closed removes visual input. Wall nearby for safety. Track times.", "sets": "3", "reps": "max", "rest": 15, "level": 1 },
+    { "name": "Tandem stance, heel-to-toe (each)",      "logName": "tandem stance",        "plan": "2\u00d730s each",         "note": "Heel to toe like tightrope. Arms at sides. Progress to eyes closed.", "sets": "2", "reps": "30s", "rest": 15, "level": 1 },
+    { "name": "Single-leg stand + head turns (each)",   "logName": "SL head turns",        "plan": "2\u00d730s each",         "note": "Balance on one foot, slowly turn head left-right. Challenges vestibular balance.", "sets": "2", "reps": "30s", "rest": 15, "level": 1 },
+
+    { "level": 2, "section": "BALANCE \u2014 LEVEL 2 (When you hit 30s eyes-closed)" },
+    { "name": "Single-leg stand on folded towel (each)","logName": "SL towel stand",       "plan": "3\u00d7max hold",         "note": "Soft surface increases proprioceptive demand. Start eyes open, progress to eyes closed.", "sets": "3", "reps": "max", "rest": 15, "level": 2 },
+    { "name": "Single-leg Romanian deadlift (no weight)","logName": "SL RDL",              "plan": "2\u00d78 each",           "note": "Hinge forward on one leg, opposite leg extends back. Slow and controlled.", "sets": "2", "reps": "8",   "rest": 20, "level": 2 },
+    { "name": "Lateral weight shift / clock reach",     "logName": "clock reach",          "plan": "2\u00d76 each",           "note": "Stand on one leg, reach opposite foot to clock positions (12, 3, 6, 9).", "sets": "2", "reps": "6",   "rest": 20, "level": 2 },
+
+    { "level": 3, "section": "BALANCE \u2014 LEVEL 3 (When Level 2 feels routine)" },
+    { "name": "SL stand on BOSU/pillow, eyes closed",   "logName": "SL BOSU stand",        "plan": "3\u00d7max",              "note": "Unstable surface + eyes closed = maximum proprioceptive challenge.", "sets": "3", "reps": "max", "rest": 20, "level": 3 },
+    { "name": "Walking lunges with pause",              "logName": "lunge pause",          "plan": "2\u00d78 steps",          "note": "Pause 2s at bottom of each lunge. Challenges dynamic balance under load.", "sets": "2", "reps": "8",   "rest": 30, "level": 3 },
+    { "name": "Single-leg squat to bench (pistol reg.)", "logName": "SL squat bench",      "plan": "2\u00d75 each",           "note": "Sit down to bench on one leg, stand back up. Pistol squat regression.", "sets": "2", "reps": "5",   "rest": 30, "level": 3 }
+  ],
+
+  "balance_level": 1,
+  "_balance_note": "Set balance_level to 1, 2, or 3. Only exercises at or below this level are included.",
+
+  "day_bonus": {
+    "mon": [
+      { "name": "Extended 90/90 hip stretch (each side)",     "logName": "90/90 hip stretch",  "plan": "3\u00d745s",  "note": "Rest day \u2014 longer holds for deeper stretch.", "sets": "3", "reps": "45s", "rest": 30 },
+      { "name": "Extended hip flexor stretch (each side)",    "logName": "hip flexor stretch", "plan": "3\u00d745s",  "note": "Rest day \u2014 extra time opening hip flexors.",   "sets": "3", "reps": "45s", "rest": 30 }
+    ],
+    "tue": [
+      { "name": "Extra wall ankle stretch (each side)",       "logName": "wall ankle stretch", "plan": "2\u00d730s",  "note": "Push A \u2014 extra ankle mobility before gym.",     "sets": "2", "reps": "30s", "rest": 30 }
+    ],
+    "wed": [
+      { "name": "Extra foam roll thoracic",                   "logName": "foam roll thoracic", "plan": "2\u00d730s",  "note": "Pull A \u2014 thoracic mobility helps deadlift.",    "sets": "2", "reps": "30s", "rest": 30 },
+      { "name": "Extra open book rotation (each side)",       "logName": "open book rotation", "plan": "2\u00d710 reps","note": "Extra thoracic rotation for pulling day.",          "sets": "2", "reps": "10",  "rest": 20 }
+    ],
+    "thu": [
+      { "name": "Extra wall ankle stretch (each side)",       "logName": "wall ankle stretch", "plan": "2\u00d730s",  "note": "Legs A \u2014 ankle mobility directly helps squat.", "sets": "2", "reps": "30s", "rest": 30 }
+    ],
+    "fri": [
+      { "name": "Extra wall slides",                          "logName": "wall slides",        "plan": "2\u00d710 reps","note": "Push B \u2014 wall slides prep shoulders for pressing.","sets": "2", "reps": "10", "rest": 20 },
+      { "name": "Extra doorway pec stretch (each side)",      "logName": "doorway pec stretch","plan": "2\u00d730s",  "note": "Open up chest before pressing volume day.",          "sets": "2", "reps": "30s", "rest": 30 }
+    ],
+    "sat": [
+      { "name": "Deep 90/90 hip stretch (each side)",         "logName": "90/90 hip stretch",  "plan": "3\u00d745s",  "note": "Long session day \u2014 deeper hip openers.",        "sets": "3", "reps": "45s", "rest": 30 },
+      { "name": "Pigeon stretch (each side)",                 "logName": "pigeon stretch",     "plan": "2\u00d730s",  "note": "External hip rotation opener. Skip if any pain.",    "sets": "2", "reps": "30s", "rest": 30 }
+    ],
+    "sun": [
+      { "name": "Extended full body stretch",                 "logName": "full body stretch",  "plan": "5 min freestyle","note": "Extra time on whatever feels tight. End-of-week recovery.", "sets": "1", "reps": "5min", "rest": 0 }
+    ]
+  }
+}
