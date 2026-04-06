@@ -1,0 +1,71 @@
+{
+  "_comment": "Temporary exercise modifications (injury, deload, etc). Delete this file or set 'active' to false when no longer needed. monday_setup.py reads it automatically.",
+  "_format": "Each day can have: subtitle_override, remove (logNames to drop), weight_overrides (logName -> new weight + note), add_exercises (inserted after removes).",
+  "active": true,
+  "label": "Adductor injury — replaces all running with elliptical",
+
+  "mon": {
+    "subtitle_override": "Active Recovery — Rest Day",
+    "remove": ["vest walk"],
+    "add_exercises": [
+      { "type": "cardio", "name": "Elliptical (low resistance)", "logName": "elliptical", "fields": ["distance","time"], "plan": "⚠ 45-60 min • Replaces vest walk (adductor recovery)" },
+      { "name": "Adductor isometric squeeze", "logName": "adductor iso", "plan": "3×10s hold @ BW", "note": "🟢 REHAB — ball between knees, gentle isometric, stop if any pain", "target": { "weight": "", "sets": "3", "reps": "10s hold" }, "rest": 30 },
+      { "name": "Gentle adductor stretch", "logName": "adductor stretch", "plan": "2×30s each side", "note": "🟢 REHAB — butterfly or standing groin stretch, NO forcing", "target": { "weight": "", "sets": "2", "reps": "30s" }, "rest": 0 }
+    ]
+  },
+
+  "tue": {
+    "remove": ["run"],
+    "add_exercises": [
+      { "type": "cardio", "name": "Elliptical (warm-up)", "logName": "elliptical", "fields": ["distance","time"], "plan": "⚠ 10-15 min • Replaces 1mi run (adductor recovery)" }
+    ]
+  },
+
+  "wed": {
+    "remove": ["run"],
+    "weight_overrides": {
+      "deadlift": { "weight": 135, "note": "⚠ REDUCED from 155→135 — narrow stance, stop if groin pain. Adductors assist in deadlift." }
+    },
+    "add_exercises": [
+      { "type": "cardio", "name": "Elliptical (warm-up)", "logName": "elliptical", "fields": ["distance","time"], "plan": "⚠ 10-15 min • Replaces 1mi run (adductor recovery)" }
+    ]
+  },
+
+  "thu": {
+    "subtitle_override": "⚠ LEGS A MODIFIED — Adductor-Safe + Rehab + Core",
+    "remove": ["run", "squats", "land mine squat", "leg press", "weight step"],
+    "add_exercises": [
+      { "type": "cardio", "name": "Elliptical (warm-up)", "logName": "elliptical", "fields": ["distance","time"], "plan": "⚠ 10-15 min • Replaces 1mi run (adductor recovery)" },
+      { "name": "Leg extension (machine)", "logName": "leg ext", "plan": "3×12-15 @ light-mod", "note": "⚠ Replaces barbell squats — isolates quads, minimal adductor load", "target": { "weight": "", "sets": "3", "reps": "12" }, "rest": 60 },
+      { "name": "Hamstring curl (cable)", "logName": "Hstring curl", "plan": "3×12 @ 70", "note": "⚠ Moved from Sun — minimal adductor involvement", "target": { "weight": "70", "sets": "3", "reps": "12" }, "rest": 60 },
+      { "name": "Adductor isometric squeeze", "logName": "adductor iso", "plan": "3×15s hold @ BW", "note": "🟢 REHAB — progress from 10s holds on Mon", "target": { "weight": "", "sets": "3", "reps": "15s hold" }, "rest": 30 },
+      { "name": "Copenhagen plank (short lever)", "logName": "copenhagen", "plan": "2×10s each side", "note": "🟢 REHAB — key adductor strengthening, knee on bench not foot. Skip if painful.", "target": { "weight": "", "sets": "2", "reps": "10s" }, "rest": 30 }
+    ]
+  },
+
+  "fri": {
+    "remove": ["run"],
+    "add_exercises": [
+      { "type": "cardio", "name": "Elliptical (warm-up)", "logName": "elliptical", "fields": ["distance","time"], "plan": "⚠ 10-15 min • Replaces 1mi run (adductor recovery)" }
+    ]
+  },
+
+  "sat": {
+    "remove": ["run"],
+    "add_exercises": [
+      { "type": "cardio", "name": "Elliptical (long session)", "logName": "elliptical", "fields": ["distance","time"], "plan": "⚠ 30-45 min • Replaces 5K run (adductor recovery)" }
+    ]
+  },
+
+  "sun": {
+    "subtitle_override": "⚠ LEGS B MODIFIED — Posterior Chain (Adductor-Safe) + Rehab + Core",
+    "remove": ["run", "lunge walk", "weight step"],
+    "add_exercises": [
+      { "type": "cardio", "name": "Elliptical (warm-up)", "logName": "elliptical", "fields": ["distance","time"], "plan": "⚠ 10-15 min • Replaces 1mi run (adductor recovery)" },
+      { "name": "Leg extension (machine)", "logName": "leg ext", "plan": "3×12-15 @ light-mod", "note": "⚠ Replaces lunge walks — lunges heavily load adductors", "target": { "weight": "", "sets": "3", "reps": "12" }, "rest": 60 },
+      { "name": "Seated calf raise", "logName": "calf raise", "plan": "3×15-20 @ moderate", "note": "⚠ Replaces step-ups — step-ups engage adductors for stability", "target": { "weight": "", "sets": "3", "reps": "15" }, "rest": 45 },
+      { "name": "Adductor isometric squeeze", "logName": "adductor iso", "plan": "3×20s hold @ BW", "note": "🟢 REHAB — progressed from 15s holds on Thu", "target": { "weight": "", "sets": "3", "reps": "20s hold" }, "rest": 30 },
+      { "name": "Gentle adductor stretch", "logName": "adductor stretch", "plan": "2×30s each side", "note": "🟢 REHAB — maintain ROM, no forcing", "target": { "weight": "", "sets": "2", "reps": "30s" }, "rest": 0 }
+    ]
+  }
+}

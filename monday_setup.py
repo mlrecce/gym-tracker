@@ -60,6 +60,7 @@ PULL_A = [  # Wednesday
     ("Lat pulldown",          "lat pull dn", 3, "10-12", 50,  (12, 3, 10),   90,  False),
     ("Face pulls (cable)",    "face pull",   3, "15-20", 30,  (20, 3, 5),    45,  False),
     ("Bicep curl (DB)",       "curl",        3, "10-12", 22.5,(12, 3, 2.5),  60,  True),
+    ("Cable curl",            "cable curl",  3, "12",    30,  (12, 3, 5),    60,  False),
     ("Back extension",        "back ext",    3, "12",    50,  (12, 3, 10),   60,  False),
 ]
 
@@ -84,6 +85,7 @@ PUSH_B = [  # Friday
 PULL_B = [  # Saturday
     ("Bent-over row (BB)",    "bent row",    3, "8-10",  85,  (10, 3, 5),    90,  False),
     ("Lat pulldown",          "lat pull dn", 3, "10-12", 60,  (12, 3, 10),   60,  False),
+    ("TRX pull-ups",          "TRX pullup",  3, "12",    0,   None,          90,  False),
     ("Negative pull-ups",     "neg pull up", 3, "3-5",   0,   None,          90,  False),
     ("Face pulls (cable)",    "face pull",   3, "15-20", 30,  (20, 3, 5),    45,  False),
     ("Hammer curl (DB)",      "hammer curl", 3, "10-12", 22.5,(12, 3, 2.5),  60,  True),
@@ -331,9 +333,45 @@ def _mod_exercise_js(entry):
 
 
 # ─────────────────────────────────────────────
+# AUTO-DISCOVER EXERCISES FROM SUMMARY SHEET
+# ─────────────────────────────────────────────
+# Known exercise logNames from COL map + hardcoded extras + stretches
+_KNOWN_LOG_NAMES = set(COL.keys()) | {"elliptical", "Ellip", "5k run", "leg ext", "calf raise", "erps"}
+
+def scan_extra_exercises(ws, exclude=None):
+    """Scan summary sheet headers for exercises not in the static COL map.
+    Returns a list of dicts: {name, logName, type} for each discovered exercise."""
+    extras = []
+    seen = set(_KNOWN_LOG_NAMES)
+    if exclude:
+        seen |= exclude
+    for c in range(6, ws.max_column + 1):
+        h = ws.cell(row=2, column=c).value
+        if h is None:
+            continue
+        h_str = str(h).strip()
+        h_lower = h_str.lower()
+        # Skip reps columns, notes column, and empty headers
+        if 'reps' in h_lower or h_lower == 'notes' or not h_str:
+            continue
+        if h_str in seen:
+            continue
+        seen.add(h_str)
+        # Determine type: check if next column is a reps column
+        next_h = ws.cell(row=2, column=c + 1).value
+        has_reps = next_h is not None and "reps" in str(next_h).lower()
+        # Guess type from name
+        cardio_hints = {'run', 'walk', 'bike', 'cycle', 'swim', 'row', 'ellip', 'cardio', 'jog'}
+        ex_type = 'cardio' if any(hint in h_lower for hint in cardio_hints) else 'strength'
+        extras.append({'name': h_str, 'logName': h_str, 'type': ex_type,
+                       'has_reps': has_reps, 'col': c})
+    return extras
+
+
+# ─────────────────────────────────────────────
 # GENERATE HTML
 # ─────────────────────────────────────────────
-def generate_html(week_dates, recent_data, output_path, stretches=None, mods=None):
+def generate_html(week_dates, recent_data, output_path, stretches=None, mods=None, extra_exercises=None):
     date_map = {}
     for i, (day_id, _, _, _, _) in enumerate(WEEK):
         date_map[day_id] = week_dates[i]
@@ -417,10 +455,26 @@ def generate_html(week_dates, recent_data, output_path, stretches=None, mods=Non
              ",\n      ".join(ex_json)))
 
     days_js = "[\n  " + ",\n  ".join(js_days) + "\n]"
+
+    # Build JS for auto-discovered exercises from summary sheet
+    discovered_js_items = []
+    for ex in (extra_exercises or []):
+        etype = ex['type']
+        rest_val = 0 if etype == 'cardio' else 60
+        discovered_js_items.append(
+            "{ name: '%s', logName: '%s', type: '%s', rest: %d }" %
+            (ex['name'].replace("'", "\\'"), ex['logName'].replace("'", "\\'"),
+             etype, rest_val))
+    discovered_js = ",\n  ".join(discovered_js_items) if discovered_js_items else ""
+
     html = HTML_TEMPLATE.replace("__DAYS_DATA__", days_js)
+    html = html.replace("__DISCOVERED_EXERCISES__", discovered_js)
     with open(output_path, "w") as f:
         f.write(html)
-    print(f"  ✓ {output_path}")
+    if discovered_js_items:
+        print(f"  ✓ {output_path} (+ {len(discovered_js_items)} auto-discovered exercises)")
+    else:
+        print(f"  ✓ {output_path}")
 
 HTML_TEMPLATE = r'''<!DOCTYPE html>
 <html lang="en">
@@ -624,8 +678,22 @@ var EXTRA_CARDIO = [
   { name: 'Elliptical', logName: 'elliptical', type: 'cardio', rest: 0 },
   { name: '5K run', logName: '5k run', type: 'cardio', rest: 0 }
 ];
+var EXTRA_STRENGTH = [
+  { name: 'Leg extension (machine)', logName: 'leg ext', type: 'strength', rest: 60 },
+  { name: 'Seated calf raise', logName: 'calf raise', type: 'strength', rest: 45 }
+];
+// Auto-discovered exercises from summary sheet columns (added by monday_setup.py)
+var DISCOVERED_EXERCISES = [
+  __DISCOVERED_EXERCISES__
+];
+EXTRA_STRENGTH.forEach(function(ex) {
+  if (!_seenLog[ex.logName]) { _seenLog[ex.logName] = true; EX_CATALOG.push(ex); }
+});
 EXTRA_CARDIO.forEach(function(ex) {
   if (!_seenLog[ex.logName]) { _seenLog[ex.logName] = true; EX_CATALOG.push(ex); }
+});
+DISCOVERED_EXERCISES.forEach(function(ex) {
+  if (ex && ex.logName && !_seenLog[ex.logName]) { _seenLog[ex.logName] = true; EX_CATALOG.push(ex); }
 });
 var _typeOrder = {cardio:0, stretch:1, strength:2};
 EX_CATALOG.sort(function(a, b) {
@@ -854,6 +922,12 @@ function buildCurrentCatalog() {
   });
   EXTRA_CARDIO.forEach(function(ex) {
     if (!seen[ex.logName]) { seen[ex.logName] = true; catalog.push(ex); }
+  });
+  EXTRA_STRENGTH.forEach(function(ex) {
+    if (!seen[ex.logName]) { seen[ex.logName] = true; catalog.push(ex); }
+  });
+  DISCOVERED_EXERCISES.forEach(function(ex) {
+    if (ex && ex.logName && !seen[ex.logName]) { seen[ex.logName] = true; catalog.push(ex); }
   });
   catalog.sort(function(a, b) {
     if (a.type === 'cardio' && b.type !== 'cardio') return -1;
@@ -1422,7 +1496,24 @@ if __name__ == "__main__":
     wb = load_workbook(excel_path, data_only=True)
     ws = wb['summary']
     recent = read_recent_data(ws)
-    print(f"  Found data for {len(recent)} exercises in the last 14 days.\n")
+    print(f"  Found data for {len(recent)} exercises in the last 14 days.")
+
+    # Load stretches early so we can exclude their logNames from auto-discovery
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    stretches = load_stretches(script_dir)
+    stretch_names = set()
+    if stretches:
+        for entry in stretches.get("core_routine", []):
+            if "logName" in entry: stretch_names.add(entry["logName"])
+        for entry in stretches.get("balance_block", []):
+            if "logName" in entry: stretch_names.add(entry["logName"])
+
+    discovered = scan_extra_exercises(ws, exclude=stretch_names)
+    if discovered:
+        print(f"  Auto-discovered {len(discovered)} new exercise(s) from summary columns:")
+        for ex in discovered:
+            print(f"    + {ex['logName']} ({ex['type']})")
+    print()
 
     today = datetime.now().date()
     monday = today - timedelta(days=today.weekday())
@@ -1435,13 +1526,10 @@ if __name__ == "__main__":
     sw_path = os.path.join(out_dir, "sw.js")
     xlsx_path = os.path.join(out_dir, f"Weekly_Plan_{monday.strftime('%b%-d')}-{week_dates[-1].strftime('%-d')}.xlsx")
 
-    # Load stretches and modifications from same directory as this script
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    stretches = load_stretches(script_dir)
     mods = load_modifications(script_dir)
 
     print("Generating files:")
-    generate_html(week_dates, recent, html_path, stretches=stretches, mods=mods)
+    generate_html(week_dates, recent, html_path, stretches=stretches, mods=mods, extra_exercises=discovered)
     generate_xlsx(week_dates, recent, xlsx_path)
 
     # Generate sw.js with date-stamped cache version so the service worker
